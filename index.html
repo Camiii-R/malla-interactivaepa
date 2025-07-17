@@ -19,16 +19,16 @@
 
     .malla {
       display: flex;
-      flex-wrap: nowrap; /* No dejar que los semestres se bajen */
-      overflow-x: auto;  /* Scroll horizontal si no caben */
+      flex-wrap: nowrap;
+      overflow-x: auto;
       gap: 20px;
       justify-content: flex-start;
       width: 100%;
-      padding-bottom: 10px; /* para que no se "pegue" el scroll */
+      padding-bottom: 10px;
     }
 
     .semestre {
-      flex: 0 0 300px; /* ancho fijo para cada semestre */
+      flex: 0 0 300px;
       background: #fff;
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -99,6 +99,28 @@
       <div class="ramo bloqueado" data-prerreq="Aprendizaje humano">Factores cognitivos y socioafectivos del aprendizaje</div>
       <div class="ramo bloqueado" data-prerreq="Aprendizaje humano">Diseño y adaptación curricular</div>
       <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo Antropológico</div>
+    </div>
+
+    <!-- SEMESTRE III -->
+    <div class="semestre">
+      <h2>Segundo Año - Semestre III</h2>
+      <div class="ramo bloqueado" data-prerreq="Políticas públicas y escenarios educativos">Seminario I</div>
+      <div class="ramo bloqueado" data-prerreq="Lenguajes artísticos II: Música y motricidad">Lenguajes artísticos III: Dramaturgia y danza</div>
+      <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Desarrollo del lenguaje oral y escrito</div>
+      <div class="ramo bloqueado" data-prerreq="Factores cognitivos y socioafectivos del aprendizaje">Bases neuropsicológicas</div>
+      <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Evaluación educativa I</div>
+      <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo Científico</div>
+    </div>
+
+    <!-- SEMESTRE IV -->
+    <div class="semestre">
+      <h2>Segundo Año - Semestre IV</h2>
+      <div class="ramo bloqueado" data-prerreq="Seminario I">Seminario II</div>
+      <div class="ramo bloqueado" data-prerreq="Lenguajes artísticos III: Dramaturgia y danza">Lenguajes artísticos IV: Teatro y expresión corporal</div>
+      <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Intervención pedagógica en infancia</div>
+      <div class="ramo bloqueado" data-prerreq="Bases neuropsicológicas">Bases biopsicosociales</div>
+      <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Evaluación educativa II</div>
+      <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo Humanístico</div>
     </div>
 
     <!-- SEMESTRE V -->

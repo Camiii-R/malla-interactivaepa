@@ -35,12 +35,17 @@
       color: white;
       text-decoration: line-through;
     }
+    .bloqueado {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 <body>
 
   <h1>Malla Interactiva - Educación Parvularia</h1>
 
+  <!-- SEMESTRE I -->
   <div class="semestre">
     <h2>Primer Año - Semestre I</h2>
     <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Fundamento de la educación parvularia</div>
@@ -50,16 +55,8 @@
     <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Aprendizaje humano</div>
   </div>
 
-  <script>
-    function toggleAprobado(element) {
-      element.classList.toggle('aprobado');
-      element.classList.toggle('no-aprobado');
-    }
-  </script>
-
-</body>
-</html>
-   <div class="semestre">
+  <!-- SEMESTRE II -->
+  <div class="semestre">
     <h2>Primer Año - Semestre II</h2>
     <div class="ramo bloqueado" data-prerreq="Pensamiento pedagógico, persona y sociedad">Políticas públicas y escenarios educativos</div>
     <div class="ramo bloqueado" data-prerreq="Lenguajes artísticos I: Arte y literatura">Lenguajes artísticos II: Música y motricidad</div>
@@ -68,3 +65,21 @@
     <div class="ramo bloqueado" data-prerreq="Aprendizaje humano">Diseño y adaptación curricular</div>
     <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo Antropológico</div>
   </div>
+
+  <script>
+    function toggleAprobado(element) {
+      if (element.classList.contains('bloqueado')) return;
+      element.classList.toggle('aprobado');
+      element.classList.toggle('no-aprobado');
+      actualizarBloqueados();
+    }
+
+    function actualizarBloqueados() {
+      document.querySelectorAll('.ramo.bloqueado').forEach(ramo => {
+        const requisito = ramo.getAttribute('data-prerreq');
+        const aprobados = Array.from(document.querySelectorAll('.ramo.aprobado')).map(r => r.textContent.trim());
+        if (aprobados.includes(requisito)) {
+          ramo.classList.remove('bloqueado');
+          ramo.classList.add('no-aprobado');
+          ramo.setAttribute('onclick', 'toggleAprobado(this)');
+          ramo.rem

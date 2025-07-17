@@ -61,6 +61,12 @@
       background-color: #ccc;
       cursor: not-allowed;
     }
+    
+    /* Mejoras UX */
+    .ramo.no-aprobado:hover {
+      background-color: #8a6ef4;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -88,34 +94,8 @@
       <div class="ramo bloqueado" data-prerreq="Aprendizaje humano">Diseño y adaptación curricular</div>
       <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo Antropológico</div>
     </div>
-  </div>
 
-  <script>
-    function toggleAprobado(element) {
-      if (element.classList.contains('bloqueado')) return;
-      element.classList.toggle('aprobado');
-      element.classList.toggle('no-aprobado');
-      actualizarBloqueados();
-    }
-
-    function actualizarBloqueados() {
-      document.querySelectorAll('.ramo.bloqueado').forEach(ramo => {
-        const requisito = ramo.getAttribute('data-prerreq');
-        const aprobados = Array.from(document.querySelectorAll('.ramo.aprobado')).map(r => r.textContent.trim());
-        if (aprobados.includes(requisito)) {
-          ramo.classList.remove('bloqueado');
-          ramo.classList.add('no-aprobado');
-          ramo.setAttribute('onclick', 'toggleAprobado(this)');
-          ramo.removeAttribute('data-prerreq');
-        }
-      });
-    }
-  </script>
-
-</body>
-</html>
-
-<!-- SEMESTRE V -->
+    <!-- SEMESTRE V -->
     <div class="semestre">
       <h2>Tercer Año - Semestre V</h2>
       <div class="ramo bloqueado" data-prerreq="Taller pedagógico II">Taller pedagógico III</div>
@@ -157,3 +137,29 @@
       <div class="ramo bloqueado" data-prerreq="Investigación educativa">Seminario</div>
       <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Ético profesional</div>
     </div>
+  </div>
+
+  <script>
+    function toggleAprobado(element) {
+      if (element.classList.contains('bloqueado')) return;
+      element.classList.toggle('aprobado');
+      element.classList.toggle('no-aprobado');
+      actualizarBloqueados();
+    }
+
+    function actualizarBloqueados() {
+      document.querySelectorAll('.ramo.bloqueado').forEach(ramo => {
+        const requisito = ramo.getAttribute('data-prerreq');
+        const aprobados = Array.from(document.querySelectorAll('.ramo.aprobado')).map(r => r.textContent.trim());
+        if (aprobados.includes(requisito)) {
+          ramo.classList.remove('bloqueado');
+          ramo.classList.add('no-aprobado');
+          ramo.setAttribute('onclick', 'toggleAprobado(this)');
+          ramo.removeAttribute('data-prerreq');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

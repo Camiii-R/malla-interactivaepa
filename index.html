@@ -1,215 +1,307 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Malla Interactiva Educación Parvularia</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #f9f9f9;
-    padding: 20px;
-    margin: 0;
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  .malla {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    gap: 20px;
-    justify-content: flex-start;
-    width: 100%;
-    padding-bottom: 10px;
-  }
-  .semestre {
-    flex: 0 0 300px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.1);
-    min-width: 280px;
-    max-width: 300px;
-    box-sizing: border-box;
-  }
-  .semestre h2 {
-    text-align: center;
-    font-size: 1.2em;
-    margin-bottom: 10px;
-  }
-  .ramo {
-    margin: 8px 0;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    user-select: none;
-    transition: background-color 0.3s, color 0.3s;
-  }
-  .no-aprobado {
-    background-color: #f8b6c3;
-  }
-  .aprobado {
-    background-color: #a287f4;
-    color: white;
-    text-decoration: line-through;
-  }
-  .bloqueado {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  .ramo.no-aprobado:hover {
-    background-color: #8a6ef4;
-    color: white;
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Interactiva EPA 🌸</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('https://i.imgur.com/E0Luy3I.png') repeat;
+      background-size: 300px;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 20px;
+      background-color: #ffd6ec;
+      margin: 0;
+      font-size: 28px;
+      color: #5c2a4a;
+    }
+
+    .malla {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .semestre {
+      background: #fff8f5;
+      border: 2px solid #ffc0cb;
+      border-radius: 16px;
+      padding: 15px;
+      min-width: 220px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .semestre h2 {
+      font-size: 16px;
+      margin-top: 0;
+      color: #b24971;
+    }
+
+    .ramo {
+      padding: 6px 10px;
+      margin: 5px 0;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      transition: transform 0.2s;
+    }
+
+    .ramo:hover {
+      transform: scale(1.02);
+    }
+
+    .aprobado {
+      background-color: #90ee90 !important;
+    }
+
+    .bloqueado {
+      background-color: #d3d3d3 !important;
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    /* Leyenda flotante */
+    .leyenda-flotante {
+      position: fixed;
+      top: 100px;
+      right: 30px;
+      background-color: #fff8e7;
+      border: 2px solid #f4d47c;
+      padding: 12px;
+      border-radius: 16px;
+      width: 180px;
+      z-index: 1000;
+      font-family: 'Segoe UI', sans-serif;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .toggle-leyenda {
+      background-color: #fddca5;
+      border: none;
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 10px;
+      color: #5c4e2f;
+    }
+
+    .contenido-leyenda ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .contenido-leyenda li {
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .color-box {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      margin-right: 8px;
+      border-radius: 4px;
+      border: 1px solid #aaa;
+    }
+
+    .color-box.aprobado {
+      background-color: #90ee90;
+    }
+
+    .color-box.no-aprobado {
+      background-color: #f0f0f0;
+    }
+
+    .color-box.bloqueado {
+      background-color: #d3d3d3;
+    }
+
+    @media (max-width: 600px) {
+      .leyenda-flotante {
+        width: auto;
+        right: 10px;
+        top: auto;
+        bottom: 20px;
+        padding: 8px;
+      }
+
+      .contenido-leyenda {
+        display: none;
+      }
+
+      .leyenda-flotante.open .contenido-leyenda {
+        display: block;
+      }
+    }
+  </style>
 </head>
 <body>
+  <h1>Malla Interactiva Educación Parvularia 🧸</h1>
 
-<h1>Malla Interactiva - Educación Parvularia</h1>
+  <div class="malla" id="malla"></div>
 
-<div class="malla">
-
-  <!-- Primer Año - Semestre I -->
-  <div class="semestre">
-    <h2>Primer Año - Semestre I</h2>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Fundamento de la educación parvularia</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Pensamiento pedagógico, persona y sociedad</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Lenguajes artísticos I: Arte y literatura</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Bases psicolingüísticas para el aprendizaje</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Aprendizaje humano</div>
+  <div class="leyenda-flotante" id="leyendaFlotante">
+    <button class="toggle-leyenda" onclick="toggleLeyenda()">🦋 Leyenda</button>
+    <div class="contenido-leyenda" id="contenidoLeyenda">
+      <ul>
+        <li><span class="color-box aprobado"></span> Aprobado</li>
+        <li><span class="color-box no-aprobado"></span> Disponible</li>
+        <li><span class="color-box bloqueado"></span> Bloqueado</li>
+      </ul>
+    </div>
   </div>
 
-  <!-- Primer Año - Semestre II -->
-  <div class="semestre">
-    <h2>Primer Año - Semestre II</h2>
-    <div class="ramo bloqueado" data-prerreq="Pensamiento pedagógico, persona y sociedad">Políticas públicas y escenarios educativos</div>
-    <div class="ramo bloqueado" data-prerreq="Lenguajes artísticos I: Arte y literatura">Lenguajes artísticos II: Música y motricidad</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Habilidades comunicativas en el párvulo</div>
-    <div class="ramo bloqueado" data-prerreq="Aprendizaje humano">Factores cognitivos y socioafectivos del aprendizaje</div>
-    <div class="ramo bloqueado" data-prerreq="Aprendizaje humano">Diseño y adaptación curricular</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo Antropológico</div>
-  </div>
+  <script>
+    const ramos = {
+      "Primer año - Semestre I": [
+        "Fundamento de la educación parvularia",
+        "Pensamiento pedagógico, persona y sociedad",
+        "Lenguajes artísticos I: Arte y literatura",
+        "Bases psicolingüísticas para el aprendizaje",
+        "Aprendizaje humano"
+      ],
+      "Primer año - Semestre II": [
+        "Políticas públicas y escenarios educativos",
+        "Lenguajes artísticos II: Música y motricidad",
+        "Habilidades comunicativas en el párvulo",
+        "Factores cognitivos y socioafectivos del aprendizaje",
+        "Diseño y adaptación curricular",
+        "Electivo Antropológico"
+      ],
+      "Segundo año - Semestre III": [
+        "Taller pedagógico I",
+        "Planificación y evaluación del proceso de educativo",
+        "Didáctica del lenguaje",
+        "Construcción del pensamiento lógico matemático",
+        "Evaluación y retroalimentación para el aprendizaje",
+        "Electivo teológico"
+      ],
+      "Segundo año - Semestre IV": [
+        "Taller pedagógico II",
+        "Didáctica de las matemáticas",
+        "Lenguajes artísticos integrados",
+        "Formación ciudadana en el párvulo",
+        "Corporalidad y movimiento",
+        "Evaluación integrada I"
+      ],
+      "Tercer año - Semestre V": [
+        "Taller pedagógico III",
+        "Didáctica de las CS. sociales",
+        "Salud del párvulo",
+        "Construcción del pensamiento científico",
+        "Seminario de enseñanza en aulas diversas",
+        "Tic para el aprendizaje",
+        "Electivo para la diversidad"
+      ],
+      "Tercer año - Semestre VI": [
+        "Taller Pedagógico IV",
+        "Didáctica de CS. naturales",
+        "Familia y su integración",
+        "Programas y exp. educativas",
+        "Gestión educativa",
+        "Electivo para la diversidad"
+      ],
+      "Cuarto año - Semestre VII": [
+        "Taller pedagógico V",
+        "Investigación educativa",
+        "Trabajo pedagógico en contextos diversos",
+        "Competencias en interculturalidad",
+        "Diseño y evaluación de proyectos",
+        "Desarrollo de las competencias emocionales del párvulo",
+        "Evaluación integrada II"
+      ],
+      "Cuarto año - Semestre VIII": [
+        "Internado pedagógico",
+        "Seminario",
+        "Ético profesional"
+      ]
+    };
 
-  <!-- Segundo Año - Semestre III -->
-  <div class="semestre">
-    <h2>Segundo Año - Semestre III</h2>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Taller pedagógico I</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Planificación y evaluación del proceso educativo</div>
-    <div class="ramo bloqueado" data-prerreq="Habilidades comunicativas en el párvulo">Didáctica del lenguaje</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Construcción del pensamiento lógico matemático</div>
-    <div class="ramo bloqueado" data-prerreq="Aprendizaje humano + Diseño y adaptación curricular">Evaluación y retroalimentación para el aprendizaje</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo teológico</div>
-  </div>
+    const prerequisitos = {
+      "Políticas públicas y escenarios educativos": ["Pensamiento pedagógico, persona y sociedad"],
+      "Lenguajes artísticos II: Música y motricidad": ["Lenguajes artísticos I: Arte y literatura"],
+      "Factores cognitivos y socioafectivos del aprendizaje": ["Aprendizaje humano"],
+      "Diseño y adaptación curricular": ["Aprendizaje humano"],
+      "Evaluación y retroalimentación para el aprendizaje": ["Aprendizaje humano", "Diseño y adaptación curricular"],
+      "Didáctica del lenguaje": ["Habilidades comunicativas en el párvulo"],
+      "Didáctica de las matemáticas": ["Construcción del pensamiento lógico matemático", "Didáctica del lenguaje"],
+      "Taller pedagógico II": ["Taller pedagógico I"],
+      "Lenguajes artísticos integrados": ["Lenguajes artísticos II: Música y motricidad"],
+      "Taller pedagógico III": ["Taller pedagógico II", "Taller pedagógico I"],
+      "Didáctica de las CS. sociales": ["Formación ciudadana en el párvulo", "Didáctica de las matemáticas"],
+      "Taller Pedagógico IV": ["Taller pedagógico III", "Taller pedagógico II", "Taller pedagógico I"],
+      "Taller pedagógico V": ["Taller Pedagógico IV", "Taller pedagógico III", "Taller pedagógico II", "Taller pedagógico I"],
+      "Trabajo pedagógico en contextos diversos": ["Familia y su integración"],
+      "Competencias en interculturalidad": ["Programas y exp. educativas"],
+      "Internado pedagógico": ["Taller pedagógico V", "Taller Pedagógico IV", "Taller pedagógico III", "Taller pedagógico II", "Taller pedagógico I"],
+      "Seminario": ["Investigación educativa"]
+    };
 
-  <!-- Segundo Año - Semestre IV -->
-  <div class="semestre">
-    <h2>Segundo Año - Semestre IV</h2>
-    <div class="ramo bloqueado" data-prerreq="Taller pedagógico I">Taller pedagógico II</div>
-    <div class="ramo bloqueado" data-prerreq="Construcción del pensamiento lógico matemático + Didáctica del lenguaje">Didáctica de las matemáticas</div>
-    <div class="ramo bloqueado" data-prerreq="Lenguajes artísticos II: Música y motricidad">Lenguajes artísticos integrados</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Formación ciudadana en el párvulo</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Corporalidad y movimiento</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Evaluación integrada I</div>
-  </div>
+    const estado = JSON.parse(localStorage.getItem("estadoRamos") || "{}");
 
-  <!-- Tercer Año - Semestre V -->
-  <div class="semestre">
-    <h2>Tercer Año - Semestre V</h2>
-    <div class="ramo bloqueado" data-prerreq="Taller pedagógico II + Taller pedagógico I">Taller pedagógico III</div>
-    <div class="ramo bloqueado" data-prerreq="Formación ciudadana en el párvulo + Didáctica de las matemáticas">Didáctica de las CS. sociales</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Salud del párvulo</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Construcción del pensamiento científico</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Seminario de enseñanza en aulas diversas</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Tic para el aprendizaje</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo para la diversidad</div>
-  </div>
+    function crearMalla() {
+      const contenedor = document.getElementById("malla");
+      contenedor.innerHTML = "";
 
-  <!-- Tercer Año - Semestre VI -->
-  <div class="semestre">
-    <h2>Tercer Año - Semestre VI</h2>
-    <div class="ramo bloqueado" data-prerreq="Taller pedagógico III + Taller pedagógico II + Taller pedagógico I">Taller pedagógico IV</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Didáctica de CS. naturales</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Familia y su integración</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Programas y exp. educativas</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Gestión educativa</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Electivo para la diversidad</div>
-  </div>
+      for (const [semestre, cursos] of Object.entries(ramos)) {
+        const div = document.createElement("div");
+        div.className = "semestre";
+        const h2 = document.createElement("h2");
+        h2.textContent = semestre;
+        div.appendChild(h2);
 
-  <!-- Cuarto Año - Semestre VII -->
-  <div class="semestre">
-    <h2>Cuarto Año - Semestre VII</h2>
-    <div class="ramo bloqueado" data-prerreq="Taller pedagógico IV + Taller pedagógico III + Taller pedagógico II + Taller pedagógico I">Taller pedagógico V</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Investigación educativa</div>
-    <div class="ramo bloqueado" data-prerreq="Familia y su integración">Trabajo pedagógico en contextos diversos</div>
-    <div class="ramo bloqueado" data-prerreq="Programas y exp. educativas">Competencias en interculturalidad</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Diseño y evaluación de proyectos</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Desarrollo de las competencias emocionales del párvulo</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Evaluación integrada II</div>
-  </div>
+        cursos.forEach(ramo => {
+          const r = document.createElement("div");
+          r.className = "ramo";
+          r.textContent = ramo;
 
-  <!-- Cuarto Año - Semestre VIII -->
-  <div class="semestre">
-    <h2>Cuarto Año - Semestre VIII</h2>
-    <div class="ramo bloqueado" data-prerreq="Taller pedagógico V + Taller pedagógico IV + Taller pedagógico III + Taller pedagógico II + Taller pedagógico I">Internado pedagógico</div>
-    <div class="ramo bloqueado" data-prerreq="Investigación educativa">Seminario</div>
-    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Ético profesional</div>
-  </div>
+          const requisitos = prerequisitos[ramo] || [];
+          const cumplidos = requisitos.every(pr => estado[pr]);
+          if (requisitos.length > 0 && !cumplidos) {
+            r.classList.add("bloqueado");
+          }
 
-</div>
+          if (estado[ramo]) {
+            r.classList.add("aprobado");
+          }
 
-<script>
-  function guardarEstado() {
-    const aprobados = Array.from(document.querySelectorAll('.ramo.aprobado')).map(r => r.textContent.trim());
-    localStorage.setItem('mallaAprobados', JSON.stringify(aprobados));
-  }
+          r.addEventListener("click", () => {
+            if (r.classList.contains("bloqueado")) return;
+            r.classList.toggle("aprobado");
+            estado[ramo] = r.classList.contains("aprobado");
+            localStorage.setItem("estadoRamos", JSON.stringify(estado));
+            crearMalla();
+          });
 
-  function cargarEstado() {
-    const aprobados = JSON.parse(localStorage.getItem('mallaAprobados') || '[]');
-    document.querySelectorAll('.ramo').forEach(ramo => {
-      const nombre = ramo.textContent.trim();
-      if (aprobados.includes(nombre)) {
-        ramo.classList.add('aprobado');
-        ramo.classList.remove('no-aprobado');
-        ramo.setAttribute('onclick', 'toggleAprobado(this)');
+          div.appendChild(r);
+        });
+
+        contenedor.appendChild(div);
       }
-    });
-    actualizarBloqueados();
-  }
+    }
 
-  function toggleAprobado(element) {
-    if (element.classList.contains('bloqueado')) return;
-    element.classList.toggle('aprobado');
-    element.classList.toggle('no-aprobado');
-    actualizarBloqueados();
-    guardarEstado();
-  }
+    function toggleLeyenda() {
+      document.getElementById("leyendaFlotante").classList.toggle("open");
+    }
 
-  function actualizarBloqueados() {
-    const aprobados = Array.from(document.querySelectorAll('.ramo.aprobado')).map(r => r.textContent.trim());
-    document.querySelectorAll('.ramo').forEach(ramo => {
-      const prereqText = ramo.getAttribute('data-prerreq');
-      if (!prereqText) return;
-
-      const prereqs = prereqText.split('+').map(s => s.trim());
-      const todosAprobados = prereqs.every(req => aprobados.includes(req));
-
-      if (todosAprobados) {
-        ramo.classList.remove('bloqueado');
-        ramo.classList.add('no-aprobado');
-        ramo.setAttribute('onclick', 'toggleAprobado(this)');
-      } else {
-        ramo.classList.add('bloqueado');
-        ramo.classList.remove('no-aprobado');
-        ramo.removeAttribute('onclick');
-      }
-    });
-  }
-
-  window.onload = cargarEstado;
-</script>
-
+    crearMalla();
+  </script>
 </body>
 </html>

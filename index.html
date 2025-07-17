@@ -173,7 +173,6 @@
       if (aprobados.includes(nombre)) {
         ramo.classList.add('aprobado');
         ramo.classList.remove('no-aprobado');
-        ramo.removeAttribute('data-prerreq');
         ramo.setAttribute('onclick', 'toggleAprobado(this)');
       }
     });
@@ -190,16 +189,21 @@
 
   function actualizarBloqueados() {
     const aprobados = Array.from(document.querySelectorAll('.ramo.aprobado')).map(r => r.textContent.trim());
-    document.querySelectorAll('.ramo.bloqueado').forEach(ramo => {
+    document.querySelectorAll('.ramo').forEach(ramo => {
       const prereqText = ramo.getAttribute('data-prerreq');
       if (!prereqText) return;
+
       const prereqs = prereqText.split('+').map(s => s.trim());
       const todosAprobados = prereqs.every(req => aprobados.includes(req));
-      if(todosAprobados) {
+
+      if (todosAprobados) {
         ramo.classList.remove('bloqueado');
         ramo.classList.add('no-aprobado');
         ramo.setAttribute('onclick', 'toggleAprobado(this)');
-        ramo.removeAttribute('data-prerreq');
+      } else {
+        ramo.classList.add('bloqueado');
+        ramo.classList.remove('no-aprobado');
+        ramo.removeAttribute('onclick');
       }
     });
   }

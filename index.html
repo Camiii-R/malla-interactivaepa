@@ -61,7 +61,7 @@
     transform: scale(1.05);
   }
   .approved {
-    background-color: #b7a0d6; /* color morado pastel */
+    background-color: #b7a0d6; /* morado pastel */
     color: white;
     text-decoration: line-through;
   }
@@ -82,6 +82,7 @@
     font-size: 14px;
     user-select: none;
     transition: opacity 0.3s ease;
+    display: none; /* inicia oculta */
   }
   .legend h3 {
     margin-top: 0;
@@ -123,6 +124,7 @@
     box-shadow: 0 0 10px rgba(162,135,244,0.7);
     user-select: none;
     transition: background-color 0.3s ease;
+    z-index: 10;
   }
   .toggle-legend-btn:hover {
     background-color: #8a6ef4;
@@ -156,7 +158,70 @@
     <div class="course" onclick="toggleApproved(this)">Electivo Antropológico</div>
   </div>
 
-  <!-- (Aquí seguirían los demás semestres con cursos y sus prerrequisitos) -->
+  <!-- Segundo Año - Semestre III -->
+  <div class="semestre">
+    <h2>Segundo Año - Semestre III</h2>
+    <div class="course" onclick="toggleApproved(this)">Taller pedagógico I</div>
+    <div class="course" onclick="toggleApproved(this)">Planificación y evaluación del proceso educativo</div>
+    <div class="course locked" data-prereq="Habilidades comunicativas en el párvulo">Didáctica del lenguaje</div>
+    <div class="course" onclick="toggleApproved(this)">Construcción del pensamiento lógico matemático</div>
+    <div class="course locked" data-prereq="Aprendizaje humano + Diseño y adaptación curricular">Evaluación y retroalimentación para el aprendizaje</div>
+    <div class="course" onclick="toggleApproved(this)">Electivo teológico</div>
+  </div>
+
+  <!-- Segundo Año - Semestre IV -->
+  <div class="semestre">
+    <h2>Segundo Año - Semestre IV</h2>
+    <div class="course locked" data-prereq="Taller pedagógico I">Taller pedagógico II</div>
+    <div class="course locked" data-prereq="Construcción del pensamiento lógico matemático + Didáctica del lenguaje">Didáctica de las matemáticas</div>
+    <div class="course locked" data-prereq="Lenguajes artísticos II: Música y motricidad">Lenguajes artísticos integrados</div>
+    <div class="course" onclick="toggleApproved(this)">Formación ciudadana en el párvulo</div>
+    <div class="course" onclick="toggleApproved(this)">Corporalidad y movimiento</div>
+    <div class="course" onclick="toggleApproved(this)">Evaluación integrada I</div>
+  </div>
+
+  <!-- Tercer Año - Semestre V -->
+  <div class="semestre">
+    <h2>Tercer Año - Semestre V</h2>
+    <div class="course locked" data-prereq="Taller pedagógico II + Taller pedagógico I">Taller pedagógico III</div>
+    <div class="course locked" data-prereq="Formación ciudadana en el párvulo + Didáctica de las matemáticas">Didáctica de las CS. sociales</div>
+    <div class="course" onclick="toggleApproved(this)">Salud del párvulo</div>
+    <div class="course" onclick="toggleApproved(this)">Construcción del pensamiento científico</div>
+    <div class="course" onclick="toggleApproved(this)">Seminario de enseñanza en aulas diversas</div>
+    <div class="course" onclick="toggleApproved(this)">Tic para el aprendizaje</div>
+    <div class="course" onclick="toggleApproved(this)">Electivo para la diversidad</div>
+  </div>
+
+  <!-- Tercer Año - Semestre VI -->
+  <div class="semestre">
+    <h2>Tercer Año - Semestre VI</h2>
+    <div class="course locked" data-prereq="Taller pedagógico III + Taller pedagógico II + Taller pedagógico I">Taller pedagógico IV</div>
+    <div class="course" onclick="toggleApproved(this)">Didáctica de CS. naturales</div>
+    <div class="course" onclick="toggleApproved(this)">Familia y su integración</div>
+    <div class="course" onclick="toggleApproved(this)">Programas y exp. educativas</div>
+    <div class="course" onclick="toggleApproved(this)">Gestión educativa</div>
+    <div class="course" onclick="toggleApproved(this)">Electivo para la diversidad</div>
+  </div>
+
+  <!-- Cuarto Año - Semestre VII -->
+  <div class="semestre">
+    <h2>Cuarto Año - Semestre VII</h2>
+    <div class="course locked" data-prereq="Taller pedagógico IV + Taller pedagógico III + Taller pedagógico II + Taller pedagógico I">Taller pedagógico V</div>
+    <div class="course" onclick="toggleApproved(this)">Investigación educativa</div>
+    <div class="course locked" data-prereq="Familia y su integración">Trabajo pedagógico en contextos diversos</div>
+    <div class="course locked" data-prereq="Programas y exp. educativas">Competencias en interculturalidad</div>
+    <div class="course" onclick="toggleApproved(this)">Diseño y evaluación de proyectos</div>
+    <div class="course" onclick="toggleApproved(this)">Desarrollo de las competencias emocionales del párvulo</div>
+    <div class="course" onclick="toggleApproved(this)">Evaluación integrada II</div>
+  </div>
+
+  <!-- Cuarto Año - Semestre VIII -->
+  <div class="semestre">
+    <h2>Cuarto Año - Semestre VIII</h2>
+    <div class="course locked" data-prereq="Taller pedagógico V + Taller pedagógico IV + Taller pedagógico III + Taller pedagógico II + Taller pedagógico I">Internado pedagógico</div>
+    <div class="course locked" data-prereq="Investigación educativa">Seminario</div>
+    <div class="course" onclick="toggleApproved(this)">Ético profesional</div>
+  </div>
 
 </div>
 

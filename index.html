@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Malla Interactiva Educación Parvularia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .semestre {
+      margin-bottom: 30px;
+      padding: 15px;
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    .ramo {
+      margin: 8px 0;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .no-aprobado {
+      background-color: #f8b6c3;
+    }
+    .aprobado {
+      background-color: #a287f4;
+      color: white;
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Malla Interactiva - Educación Parvularia</h1>
+
+  <div class="semestre">
+    <h2>Primer Año - Semestre I</h2>
+    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Fundamento de la educación parvularia</div>
+    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Pensamiento pedagógico, persona y sociedad</div>
+    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Lenguajes artísticos I: Arte y literatura</div>
+    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Bases psicolingüísticas para el aprendizaje</div>
+    <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Aprendizaje humano</div>
+  </div>
+
+  <script>
+    function toggleAprobado(element) {
+      element.classList.toggle('aprobado');
+      element.classList.toggle('no-aprobado');
+    }
+  </script>
+
+</body>
+</html>

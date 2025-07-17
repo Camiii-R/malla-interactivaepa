@@ -10,10 +10,14 @@
     background: #f9f9f9;
     padding: 20px;
     margin: 0;
+    position: relative;
+    overflow-x: hidden;
   }
   h1 {
     text-align: center;
     margin-bottom: 40px;
+    position: relative;
+    z-index: 10;
   }
   .malla {
     display: flex;
@@ -23,6 +27,8 @@
     justify-content: flex-start;
     width: 100%;
     padding-bottom: 10px;
+    position: relative;
+    z-index: 10;
   }
   .semestre {
     flex: 0 0 300px;
@@ -64,9 +70,61 @@
     background-color: #8a6ef4;
     color: white;
   }
+
+  /* Animaciones de mariposas y flores */
+
+  .mariposa {
+    position: fixed;
+    width: 80px;
+    animation: vuelo 12s linear infinite;
+    opacity: 0.7;
+    top: 20%;
+    left: -100px;
+    z-index: 1;
+  }
+
+  .mariposa:nth-child(2) {
+    animation-delay: 6s;
+    top: 40%;
+    width: 60px;
+  }
+
+  .flor {
+    position: fixed;
+    width: 60px;
+    animation: flotacion 8s ease-in-out infinite;
+    opacity: 0.5;
+    bottom: 10%;
+    right: -80px;
+    z-index: 1;
+  }
+
+  .flor:nth-child(4) {
+    animation-delay: 4s;
+    bottom: 15%;
+    right: -100px;
+    width: 40px;
+  }
+
+  @keyframes vuelo {
+    0% { left: -100px; transform: rotate(0deg); }
+    50% { transform: rotate(10deg); }
+    100% { left: 110%; transform: rotate(0deg); }
+  }
+
+  @keyframes flotacion {
+    0%, 100% { bottom: 10%; }
+    50% { bottom: 15%; }
+  }
 </style>
 </head>
 <body>
+
+<!-- Mariposas y flores animadas -->
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Monarch_Butterfly_Danaus_plexippus_Male_1.jpg/320px-Monarch_Butterfly_Danaus_plexippus_Male_1.jpg" alt="Mariposa" class="mariposa" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/77/Monarch_Butterfly_Danaus_plexippus_Male_1.jpg/320px-Monarch_Butterfly_Danaus_plexippus_Male_1.jpg" alt="Mariposa" class="mariposa" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Flower_icon_-_Noun_Project.svg/1024px-Flower_icon_-_Noun_Project.svg.png" alt="Flor" class="flor" />
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0a/Flower_icon_-_Noun_Project.svg/1024px-Flower_icon_-_Noun_Project.svg.png" alt="Flor" class="flor" />
 
 <h1>Malla Interactiva - Educación Parvularia</h1>
 
@@ -143,8 +201,8 @@
     <h2>Cuarto Año - Semestre VII</h2>
     <div class="ramo bloqueado" data-prerreq="Taller pedagógico IV + Taller pedagógico III + Taller pedagógico II + Taller pedagógico I">Taller pedagógico V</div>
     <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Investigación educativa</div>
-    <div class="ramo no-aprobado bloqueado" data-prerreq="Familia y su integración">Trabajo pedagógico en contextos diversos</div>
-    <div class="ramo no-aprobado bloqueado" data-prerreq="Programas y exp. educativas">Competencias en interculturalidad</div>
+    <div class="ramo bloqueado" data-prerreq="Familia y su integración">Trabajo pedagógico en contextos diversos</div>
+    <div class="ramo bloqueado" data-prerreq="Programas y exp. educativas">Competencias en interculturalidad</div>
     <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Diseño y evaluación de proyectos</div>
     <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Desarrollo de las competencias emocionales del párvulo</div>
     <div class="ramo no-aprobado" onclick="toggleAprobado(this)">Evaluación integrada II</div>
@@ -161,26 +219,40 @@
 </div>
 
 <script>
+  function guardarEstado() {
+    const aprobados = Array.from(document.querySelectorAll('.ramo.aprobado')).map(r => r.textContent.trim());
+    localStorage.setItem('mallaAprobados', JSON.stringify(aprobados));
+  }
+
+  function cargarEstado() {
+    const aprobados = JSON.parse(localStorage.getItem('mallaAprobados') || '[]');
+    document.querySelectorAll('.ramo').forEach(ramo => {
+      const nombre = ramo.textContent.trim();
+      if (aprobados.includes(nombre)) {
+        ramo.classList.add('aprobado');
+        ramo.classList.remove('no-aprobado');
+        ramo.removeAttribute('data-prerreq');
+        ramo.setAttribute('onclick', 'toggleAprobado(this)');
+      }
+    });
+    actualizarBloqueados();
+  }
+
   function toggleAprobado(element) {
     if (element.classList.contains('bloqueado')) return;
     element.classList.toggle('aprobado');
     element.classList.toggle('no-aprobado');
     actualizarBloqueados();
+    guardarEstado();
   }
 
   function actualizarBloqueados() {
     const aprobados = Array.from(document.querySelectorAll('.ramo.aprobado')).map(r => r.textContent.trim());
-    
     document.querySelectorAll('.ramo.bloqueado').forEach(ramo => {
       const prereqText = ramo.getAttribute('data-prerreq');
-      if (!prereqText) return; // sin prerrequisito, nada que hacer
-      
-      // separo prerrequisitos por "+"
+      if (!prereqText) return;
       const prereqs = prereqText.split('+').map(s => s.trim());
-      
-      // verifico si todos los prerrequisitos están aprobados
       const todosAprobados = prereqs.every(req => aprobados.includes(req));
-      
       if(todosAprobados) {
         ramo.classList.remove('bloqueado');
         ramo.classList.add('no-aprobado');
@@ -189,6 +261,8 @@
       }
     });
   }
+
+  window.onload = cargarEstado;
 </script>
 
 </body>

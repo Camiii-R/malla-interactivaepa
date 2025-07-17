@@ -2,174 +2,117 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Malla Interactiva EPA 🌸</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Malla Interactiva Educación Parvularia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       margin: 0;
-      padding: 0;
-      background: url('https://i.imgur.com/E0Luy3I.png') repeat;
-      background-size: 300px;
-    }
-
-    h1 {
-      text-align: center;
-      padding: 20px;
-      background-color: #ffd6ec;
-      margin: 0;
-      font-size: 28px;
-      color: #5c2a4a;
-    }
-
-    .malla {
+      padding: 1rem;
+      background-color: #fdf6f9;
+      color: #333;
       display: flex;
-      flex-wrap: nowrap;
-      overflow-x: auto;
-      padding: 20px;
-      gap: 20px;
     }
 
-    .semestre {
-      background: #fff8f5;
-      border: 2px solid #ffc0cb;
-      border-radius: 16px;
-      padding: 15px;
-      min-width: 220px;
-      flex-shrink: 0;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    .container {
+      flex: 1;
+      max-width: 1000px;
+      margin-left: 220px;
     }
 
-    .semestre h2 {
-      font-size: 16px;
-      margin-top: 0;
-      color: #b24971;
+    h2 {
+      color: #b36b9c;
+      margin-top: 2rem;
+      border-bottom: 2px solid #e0c9dd;
+      padding-bottom: 0.5rem;
     }
 
-    .ramo {
-      padding: 6px 10px;
-      margin: 5px 0;
-      border-radius: 8px;
-      cursor: pointer;
-      background-color: #f0f0f0;
-      border: 1px solid #ccc;
-      transition: transform 0.2s;
+    .semester {
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
     }
 
-    .ramo:hover {
-      transform: scale(1.02);
-    }
-
-    .aprobado {
-      background-color: #90ee90 !important;
-    }
-
-    .bloqueado {
-      background-color: #d3d3d3 !important;
-      pointer-events: none;
-      opacity: 0.6;
-    }
-
-    /* Leyenda flotante */
-    .leyenda-flotante {
-      position: fixed;
-      top: 100px;
-      right: 30px;
-      background-color: #fff8e7;
-      border: 2px solid #f4d47c;
-      padding: 12px;
-      border-radius: 16px;
-      width: 180px;
-      z-index: 1000;
-      font-family: 'Segoe UI', sans-serif;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    .toggle-leyenda {
-      background-color: #fddca5;
-      border: none;
+    .course {
+      background-color: #f3d1e0;
+      border: 2px solid #dbaecf;
       border-radius: 10px;
-      padding: 6px 10px;
-      font-size: 14px;
-      font-weight: bold;
+      padding: 10px;
+      margin: 5px;
       cursor: pointer;
-      width: 100%;
+      transition: transform 0.2s ease, background-color 0.3s;
+      flex: 1 1 calc(33% - 10px);
+      box-sizing: border-box;
+      text-align: center;
+      user-select: none;
+    }
+
+    .course:hover {
+      transform: scale(1.03);
+    }
+
+    .approved {
+      background-color: #c7f5d3 !important;
+      border-color: #95e6ad !important;
+    }
+
+    .locked {
+      background-color: #e0e0e0 !important;
+      border-color: #cccccc !important;
+      cursor: not-allowed;
+    }
+
+    /* Leyenda fija */
+    .leyenda {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 200px;
+      height: 100%;
+      background: #fff0f7;
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+      font-size: 0.95rem;
+    }
+
+    .leyenda h3 {
+      margin-top: 0;
+      color: #a34f85;
+    }
+
+    .leyenda .item {
       margin-bottom: 10px;
-      color: #5c4e2f;
-    }
-
-    .contenido-leyenda ul {
-      list-style: none;
-      padding-left: 0;
-      margin: 0;
-    }
-
-    .contenido-leyenda li {
       display: flex;
       align-items: center;
-      margin-bottom: 8px;
-      font-size: 14px;
-      color: #444;
     }
 
-    .color-box {
-      display: inline-block;
-      width: 18px;
-      height: 18px;
-      margin-right: 8px;
+    .leyenda .box {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
       border-radius: 4px;
-      border: 1px solid #aaa;
     }
 
-    .color-box.aprobado {
-      background-color: #90ee90;
-    }
-
-    .color-box.no-aprobado {
-      background-color: #f0f0f0;
-    }
-
-    .color-box.bloqueado {
-      background-color: #d3d3d3;
-    }
-
-    @media (max-width: 600px) {
-      .leyenda-flotante {
-        width: auto;
-        right: 10px;
-        top: auto;
-        bottom: 20px;
-        padding: 8px;
-      }
-
-      .contenido-leyenda {
-        display: none;
-      }
-
-      .leyenda-flotante.open .contenido-leyenda {
-        display: block;
-      }
-    }
+    .leyenda .ap { background: #c7f5d3; border: 1px solid #95e6ad; }
+    .leyenda .noap { background: #f3d1e0; border: 1px solid #dbaecf; }
+    .leyenda .bloq { background: #e0e0e0; border: 1px solid #cccccc; }
   </style>
 </head>
 <body>
-  <h1>Malla Interactiva Educación Parvularia 🧸</h1>
 
-  <div class="malla" id="malla"></div>
-
-  <div class="leyenda-flotante" id="leyendaFlotante">
-    <button class="toggle-leyenda" onclick="toggleLeyenda()">🦋 Leyenda</button>
-    <div class="contenido-leyenda" id="contenidoLeyenda">
-      <ul>
-        <li><span class="color-box aprobado"></span> Aprobado</li>
-        <li><span class="color-box no-aprobado"></span> Disponible</li>
-        <li><span class="color-box bloqueado"></span> Bloqueado</li>
-      </ul>
-    </div>
+  <div class="leyenda">
+    <h3>Colores</h3>
+    <div class="item"><div class="box ap"></div> Aprobado</div>
+    <div class="item"><div class="box noap"></div> No aprobado</div>
+    <div class="item"><div class="box bloq"></div> Bloqueado</div>
   </div>
 
+  <div class="container" id="malla"></div>
+
   <script>
-    const ramos = {
+    const cursos = {
       "Primer año - Semestre I": [
         "Fundamento de la educación parvularia",
         "Pensamiento pedagógico, persona y sociedad",
@@ -187,7 +130,7 @@
       ],
       "Segundo año - Semestre III": [
         "Taller pedagógico I",
-        "Planificación y evaluación del proceso de educativo",
+        "Planificación y evaluación del proceso educativo",
         "Didáctica del lenguaje",
         "Construcción del pensamiento lógico matemático",
         "Evaluación y retroalimentación para el aprendizaje",
@@ -234,7 +177,7 @@
       ]
     };
 
-    const prerequisitos = {
+    const prerrequisitos = {
       "Políticas públicas y escenarios educativos": ["Pensamiento pedagógico, persona y sociedad"],
       "Lenguajes artísticos II: Música y motricidad": ["Lenguajes artísticos I: Arte y literatura"],
       "Factores cognitivos y socioafectivos del aprendizaje": ["Aprendizaje humano"],
@@ -254,54 +197,70 @@
       "Seminario": ["Investigación educativa"]
     };
 
-    const estado = JSON.parse(localStorage.getItem("estadoRamos") || "{}");
+    const malla = document.getElementById('malla');
+    const estadoCursos = JSON.parse(localStorage.getItem('estadoCursos')) || {};
 
-    function crearMalla() {
-      const contenedor = document.getElementById("malla");
-      contenedor.innerHTML = "";
+    function puedeAprobar(curso) {
+      const pre = prerrequisitos[curso];
+      return !pre || pre.every(p => estadoCursos[p]);
+    }
 
-      for (const [semestre, cursos] of Object.entries(ramos)) {
-        const div = document.createElement("div");
-        div.className = "semestre";
-        const h2 = document.createElement("h2");
+    function crearCurso(nombre) {
+      const div = document.createElement('div');
+      div.className = 'course';
+      div.textContent = nombre;
+
+      if (estadoCursos[nombre]) {
+        div.classList.add('approved');
+      } else if (!puedeAprobar(nombre)) {
+        div.classList.add('locked');
+      }
+
+      div.addEventListener('click', () => {
+        if (div.classList.contains('locked')) return;
+
+        estadoCursos[nombre] = !estadoCursos[nombre];
+        actualizarEstado();
+      });
+
+      return div;
+    }
+
+    function actualizarEstado() {
+      localStorage.setItem('estadoCursos', JSON.stringify(estadoCursos));
+
+      document.querySelectorAll('.course').forEach(div => {
+        const nombre = div.textContent;
+        div.classList.remove('approved', 'locked');
+
+        if (estadoCursos[nombre]) {
+          div.classList.add('approved');
+        } else if (!puedeAprobar(nombre)) {
+          div.classList.add('locked');
+        }
+      });
+    }
+
+    function cargarMalla() {
+      for (const semestre in cursos) {
+        const h2 = document.createElement('h2');
         h2.textContent = semestre;
-        div.appendChild(h2);
+        malla.appendChild(h2);
 
-        cursos.forEach(ramo => {
-          const r = document.createElement("div");
-          r.className = "ramo";
-          r.textContent = ramo;
+        const contenedor = document.createElement('div');
+        contenedor.className = 'semester';
 
-          const requisitos = prerequisitos[ramo] || [];
-          const cumplidos = requisitos.every(pr => estado[pr]);
-          if (requisitos.length > 0 && !cumplidos) {
-            r.classList.add("bloqueado");
-          }
-
-          if (estado[ramo]) {
-            r.classList.add("aprobado");
-          }
-
-          r.addEventListener("click", () => {
-            if (r.classList.contains("bloqueado")) return;
-            r.classList.toggle("aprobado");
-            estado[ramo] = r.classList.contains("aprobado");
-            localStorage.setItem("estadoRamos", JSON.stringify(estado));
-            crearMalla();
-          });
-
-          div.appendChild(r);
+        cursos[semestre].forEach(curso => {
+          const cursoDiv = crearCurso(curso);
+          contenedor.appendChild(cursoDiv);
         });
 
-        contenedor.appendChild(div);
+        malla.appendChild(contenedor);
       }
     }
 
-    function toggleLeyenda() {
-      document.getElementById("leyendaFlotante").classList.toggle("open");
-    }
-
-    crearMalla();
+    cargarMalla();
+    actualizarEstado();
   </script>
 </body>
 </html>

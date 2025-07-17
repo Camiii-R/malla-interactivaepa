@@ -15,6 +15,26 @@
       display: flex;
     }
 
+    /* Botón para mostrar/ocultar leyenda */
+    #toggle-leyenda {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 101;
+      background: #a287f4;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      transition: background-color 0.3s;
+    }
+    #toggle-leyenda:hover {
+      background-color: #7b5eea;
+    }
+
     .leyenda {
       position: fixed;
       left: 0;
@@ -27,6 +47,12 @@
       box-sizing: border-box;
       font-size: 0.95rem;
       overflow-y: auto;
+      transition: transform 0.4s ease;
+      transform: translateX(0);
+      z-index: 100;
+    }
+    .leyenda.oculto {
+      transform: translateX(-220px);
     }
 
     .leyenda h3 {
@@ -47,7 +73,7 @@
       border-radius: 4px;
     }
 
-    .leyenda .ap { background: #c7f5d3; border: 1px solid #95e6ad; }
+    .leyenda .ap { background: #d7c3f7; border: 1px solid #a287f4; }
     .leyenda .noap { background: #f3d1e0; border: 1px solid #dbaecf; }
     .leyenda .bloq { background: #e0e0e0; border: 1px solid #cccccc; }
 
@@ -57,6 +83,11 @@
       white-space: nowrap;
       width: calc(100% - 220px);
       padding-bottom: 1rem;
+      transition: margin-left 0.4s ease;
+    }
+    .container.leyenda-oculta {
+      margin-left: 0;
+      width: 100%;
     }
 
     .semester {
@@ -91,6 +122,7 @@
       transition: transform 0.2s ease, background-color 0.3s;
       text-align: center;
       user-select: none;
+      color: #333;
     }
 
     .course:hover {
@@ -98,30 +130,43 @@
     }
 
     .approved {
-      background-color: #c7f5d3 !important;
-      border-color: #95e6ad !important;
+      background-color: #d7c3f7 !important; /* morado pastel */
+      border-color: #a287f4 !important;
+      color: #3b2c5a; /* texto morado oscuro para contraste */
     }
 
     .locked {
       background-color: #e0e0e0 !important;
       border-color: #cccccc !important;
       cursor: not-allowed;
+      color: #777;
     }
-
   </style>
 </head>
 <body>
 
-  <div class="leyenda">
+  <button id="toggle-leyenda" aria-expanded="true" aria-controls="leyenda">Mostrar/Ocultar Colores</button>
+
+  <aside class="leyenda" id="leyenda" role="region" aria-label="Leyenda de colores">
     <h3>Colores</h3>
     <div class="item"><div class="box ap"></div> Aprobado</div>
     <div class="item"><div class="box noap"></div> No aprobado</div>
     <div class="item"><div class="box bloq"></div> Bloqueado</div>
-  </div>
+  </aside>
 
-  <div class="container" id="malla"></div>
+  <main class="container" id="malla"></main>
 
   <script>
+    const toggleBtn = document.getElementById('toggle-leyenda');
+    const leyenda = document.getElementById('leyenda');
+    const container = document.getElementById('malla');
+
+    toggleBtn.addEventListener('click', () => {
+      const oculto = leyenda.classList.toggle('oculto');
+      container.classList.toggle('leyenda-oculta', oculto);
+      toggleBtn.setAttribute('aria-expanded', !oculto);
+    });
+
     const cursos = {
       "Primer año - Semestre I": [
         "Fundamento de la educación parvularia",

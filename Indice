@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Interactiva Educación Parvularia - Plan 4</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 1rem;
+      background-color: #fefefe;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .malla {
+      display: flex;
+      overflow-x: auto;
+      padding-bottom: 2rem;
+    }
+    .semestre {
+      flex: 0 0 auto;
+      margin-right: 1rem;
+      padding: 1rem;
+      background-color: #faf3f8;
+      border-radius: 1rem;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .semestre h2 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .curso {
+      margin: 0.3rem 0;
+      padding: 0.4rem;
+      background-color: #e3d7f4;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      position: relative;
+      transition: background-color 0.3s ease;
+    }
+    .curso.aprobado {
+      background-color: #c8b3e6;
+    }
+    .curso.bloqueado {
+      background-color: #ddd;
+      color: #888;
+      cursor: not-allowed;
+    }
+    .tooltip {
+      position: absolute;
+      background: #333;
+      color: #fff;
+      padding: 0.3rem 0.6rem;
+      border-radius: 0.3rem;
+      font-size: 0.8rem;
+      white-space: pre-line;
+      display: none;
+      z-index: 100;
+    }
+    .leyenda {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f0f0f0;
+      border-radius: 1rem;
+      display: flex;
+      justify-content: space-around;
+    }
+    .leyenda div {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .leyenda .cuadro {
+      width: 1rem;
+      height: 1rem;
+      border-radius: 0.2rem;
+    }
+    .aprobado-box { background-color: #c8b3e6; }
+    .pendiente-box { background-color: #e3d7f4; }
+    .bloqueado-box { background-color: #ddd; }
+  </style>
+</head>
+<body>
+  <h1>Malla Interactiva Educación Parvularia - Plan 4</h1>
+  <div class="malla" id="malla"></div>
+  <div class="leyenda">
+    <div><div class="cuadro aprobado-box"></div> Aprobado</div>
+    <div><div class="cuadro pendiente-box"></div> Pendiente</div>
+    <div><div class="cuadro bloqueado-box"></div> Bloqueado</div>
+  </div>
+  <script>
+    const cursos = [
+      { nombre: "Desarrollo y Aprendizaje de la Persona", semestre: 1 },
+      { nombre: "Fundamentos Pedagógicos y Filosóficos", semestre: 1 },
+      { nombre: "Perspectivas de la Educación en la Primera Infancia", semestre: 1 },
+      { nombre: "Comunicación Académica en la Universidad", semestre: 1 },
+      { nombre: "Alfabetización Emocional", semestre: 1 },
+      { nombre: "Exploración de los Lenguajes Artísticos", semestre: 1 },
+
+      { nombre: "Factores del Desarrollo y el Aprendizaje Integral de la Persona", semestre: 2, prerrequisitos: ["Desarrollo y Aprendizaje de la Persona"] },
+      { nombre: "Políticas Educativas y Profesión Docente", semestre: 2, prerrequisitos: ["Fundamentos Pedagógicos y Filosóficos"] },
+      { nombre: "Bases Epistemológicas: Educación", semestre: 2, prerrequisitos: ["Perspectivas de la Educación en la Primera Infancia"] },
+      { nombre: "Didáctica en Primera Infancia I", semestre: 2, prerrequisitos: ["Perspectivas de la Educación en la Primera Infancia"] },
+      { nombre: "Neurodesarrollo y Corporalidad", semestre: 2 },
+      { nombre: "Identidad Personal y Profesional Docente", semestre: 2 },
+      { nombre: "Bienestar Integral del Párvulo", semestre: 2 },
+
+      { nombre: "Diseño Curricular para el Aprendizaje", semestre: 3, prerrequisitos: ["Políticas Educativas y Profesión Docente", "Fundamentos Pedagógicos y Filosóficos"] },
+      { nombre: "Adquisición y Desarrollo del Lenguaje Verbal", semestre: 3 },
+      { nombre: "Didáctica en Primera Infancia II", semestre: 3, prerrequisitos: ["Didáctica en Primera Infancia I"] },
+      { nombre: "Artes Visuales y su Didáctica", semestre: 3, prerrequisitos: ["Didáctica en Primera Infancia I", "Exploración de los Lenguajes Artísticos"] },
+      { nombre: "Pensamiento Matemático y su Didáctica", semestre: 3, prerrequisitos: ["Didáctica en Primera Infancia I"] },
+      { nombre: "Electivo Antropológico Cristiano", semestre: 3 },
+
+      { nombre: "Evaluación para el Aprendizaje", semestre: 4, prerrequisitos: ["Diseño Curricular para el Aprendizaje", "Políticas Educativas y Profesión Docente", "Fundamentos Pedagógicos y Filosóficos"] },
+      { nombre: "TIC para el Aprendizaje", semestre: 4 },
+      { nombre: "Práctica Inicial I (Ev. Ciclo I)", semestre: 4, prerrequisitos: ["Identidad Personal y Profesional Docente"] },
+      { nombre: "Pensamiento Científico y su Didáctica", semestre: 4, prerrequisitos: ["Didáctica en Primera Infancia II"] },
+      { nombre: "Literatura Infantil - Artes escénicas y su Didáctica", semestre: 4, prerrequisitos: ["Didáctica en Primera Infancia II", "Exploración de los Lenguajes Artísticos"] },
+      { nombre: "Lenguaje Verbal y su Didáctica", semestre: 4, prerrequisitos: ["Didáctica en Primera Infancia II", "Adquisición y Desarrollo del Lenguaje Verbal"] },
+
+      { nombre: "Educación Inclusiva y Atención a la Diversidad", semestre: 5, prerrequisitos: ["Evaluación para el Aprendizaje", "Diseño Curricular para el Aprendizaje", "Políticas Educativas y Profesión Docente", "Fundamentos Pedagógicos y Filosóficos"] },
+      { nombre: "Práctica Inicial II", semestre: 5, prerrequisitos: ["Práctica Inicial I (Ev. Ciclo I)"] },
+      { nombre: "Entorno Sociocultural y su Didáctica", semestre: 5, prerrequisitos: ["Didáctica en Primera Infancia II"] },
+      { nombre: "Trayectoria y Transiciones Educativas", semestre: 5 },
+      { nombre: "Artes Musicales y su Didáctica", semestre: 5, prerrequisitos: ["Exploración de los Lenguajes Artísticos", "Didáctica en Primera Infancia II"] },
+      { nombre: "Electivo Teológico", semestre: 5 },
+
+      { nombre: "Perspectivas Interculturales en Educación", semestre: 6, prerrequisitos: ["Educación Inclusiva y Atención a la Diversidad", "Evaluación para el Aprendizaje", "Diseño Curricular para el Aprendizaje", "Políticas Educativas y Profesión Docente", "Fundamentos Pedagógicos y Filosóficos"] },
+      { nombre: "Convivencia y Vida Democrática para la Ciudadanía", semestre: 6, prerrequisitos: ["Educación Inclusiva y Atención a la Diversidad"] },
+      { nombre: "Práctica Intermedia I (A+S)", semestre: 6, prerrequisitos: ["Práctica Inicial I (Ev. Ciclo I)", "Práctica Inicial II"] },
+      { nombre: "Fundamentos y Atención a las NEE en la Infancia", semestre: 6 },
+      { nombre: "Gestión y Liderazgo Educativo (A+S)", semestre: 6 },
+      { nombre: "Diseño y Evaluación de Proyectos (A+S)", semestre: 6 },
+      { nombre: "Electivo para la Diversidad I", semestre: 6 },
+
+      { nombre: "Investigación Educativa", semestre: 7, prerrequisitos: ["Perspectivas Interculturales en Educación", "Educación Inclusiva y Atención a la Diversidad", "Evaluación para el Aprendizaje", "Diseño Curricular para el Aprendizaje", "Políticas Educativas y Profesión Docente", "Fundamentos Pedagógicos y Filosóficos"] },
+      { nombre: "Práctica Intermedia II (mención) (Ev. Ciclo 2)", semestre: 7, prerrequisitos: ["Práctica Intermedia I (A+S)", "Práctica Inicial I (Ev. Ciclo I)", "Práctica Inicial II"] },
+      { nombre: "Familia, Comunidad y Territorio", semestre: 7, prerrequisitos: ["Innovación Educativa Intercultural y Familiar Comunitaria"] },
+      { nombre: "Experiencias Educativas Interculturales", semestre: 7 },
+      { nombre: "Electivo para la Diversidad II", semestre: 7 },
+
+      { nombre: "Seminario de Investigación de la práctica Educativa", semestre: 8, prerrequisitos: ["Investigación Educativa", "Perspectivas Interculturales en Educación", "Educación Inclusiva y Atención a la Diversidad", "Evaluación para el Aprendizaje", "Diseño Curricular para el Aprendizaje", "Políticas Educativas y Profesión Docente", "Fundamentos Pedagógicos y Filosóficos"] },
+      { nombre: "Práctica Intermedia III", semestre: 8, prerrequisitos: ["Práctica Intermedia II (mención) (Ev. Ciclo 2)", "Práctica Intermedia I (A+S)", "Práctica Inicial I (Ev. Ciclo I)", "Práctica Inicial II"] },
+      { nombre: "Saberes Educativos Mapuche para la Infancia", semestre: 8, prerrequisitos: ["Experiencias Educativas Interculturales"] },
+      { nombre: "Innovación Educativa Intercultural y Familiar Comunitaria", semestre: 8, prerrequisitos: ["Experiencias Educativas Interculturales", "Familia, Comunidad y Territorio"] },
+      { nombre: "Dominios de Saberes Pedagógicos y Disciplinarios", semestre: 8, prerrequisitos: ["Práctica Intermedia II (mención) (Ev. Ciclo 2)"] },
+      { nombre: "Ética Profesional", semestre: 8 },
+
+      { nombre: "Práctica Profesional (Ev. Ciclo 3)", semestre: 9, prerrequisitos: ["Práctica Intermedia III"] }
+    ];
+
+    const mallaDiv = document.getElementById("malla");
+    const estadoCursos = JSON.parse(localStorage.getItem("estadoCursosPlan4")) || {};
+
+    function renderMalla() {
+      mallaDiv.innerHTML = "";
+      const semestres = [...new Set(cursos.map(c => c.semestre))];
+      semestres.forEach(sem => {
+        const columna = document.createElement("div");
+        columna.className = "semestre";
+        columna.innerHTML = `<h2>Semestre ${sem}</h2>`;
+        cursos.filter(c => c.semestre === sem).forEach(curso => {
+          const div = document.createElement("div");
+          div.className = "curso";
+          div.textContent = curso.nombre;
+          const id = curso.nombre;
+
+          const aprobado = estadoCursos[id];
+          const bloqueado = curso.prerrequisitos && curso.prerrequisitos.some(pr => !estadoCursos[pr]);
+
+          if (aprobado) div.classList.add("aprobado");
+          else if (bloqueado) div.classList.add("bloqueado");
+
+          div.addEventListener("click", () => {
+            if (div.classList.contains("bloqueado")) return;
+            estadoCursos[id] = !estadoCursos[id];
+            localStorage.setItem("estadoCursosPlan4", JSON.stringify(estadoCursos));
+            renderMalla();
+          });
+
+          if (curso.prerrequisitos) {
+            const tooltip = document.createElement("div");
+            tooltip.className = "tooltip";
+            tooltip.textContent = "Prerrequisitos:\n" + curso.prerrequisitos.join("\n");
+            div.appendChild(tooltip);
+
+            div.addEventListener("mouseenter", (e) => {
+              tooltip.style.display = "block";
+              tooltip.style.top = `${e.offsetY + 20}px`;
+              tooltip.style.left = `${e.offsetX + 20}px`;
+            });
+            div.addEventListener("mouseleave", () => {
+              tooltip.style.display = "none";
+            });
+          }
+
+          columna.appendChild(div);
+        });
+        mallaDiv.appendChild(columna);
+      });
+    }
+
+    renderMalla();
+  </script>
+</body>
+</html>
